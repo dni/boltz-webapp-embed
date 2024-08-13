@@ -19,7 +19,18 @@
     <br />
     <label>Set Address: <input type="checkbox" id="address" /></label>
     <br />
-    <label>Set Send Amount: <input type="number" id="amount" value="100000"/></label>
+    <label>
+        <label for="sendAmount">
+            <input type="radio" id="sendAmount" name="amount[]" value="sendAmount" checked/>
+            Send Amount
+        </label>
+        <br />
+        <label for="receiveAmount">
+            <input type="radio" id="receiveAmount" name="amount[]" value="receiveAmount"/>
+            Receive Amount
+        </label>
+        <br />
+        <input type="number" id="amount" value="100000"/></label>
     <br />
     <label>Set Asset Send:
         <label>
@@ -64,6 +75,7 @@
     <script type="module">
         import { iframeResize } from 'iframe-resizer';
         const baseUrl = "https://webapp-git-feat-url-params-3-boltz.vercel.app?embed=1&ref=embed";
+        //const baseUrl = "https://localhost:5173?embed=1&ref=embed";
         let url = baseUrl;
         const urlElement = document.getElementById('url');
         const iframe = document.getElementById('boltz');
@@ -82,8 +94,9 @@
                 url += "&address=bc1qar0srrr";
             }
             const amount = document.getElementById('amount').value;
-            if (amount) {
-                url += `&sendAmount=${amount}`;
+            const amountDirection = document.querySelector('input[name="amount[]"]:checked').value;
+            if (amount && amountDirection) {
+                url += `&${amountDirection}=${amount}`;
             }
             const assetSend = document.querySelector('input[name="assetSend[]"]:checked');
             if (assetSend) {
