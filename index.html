@@ -5,19 +5,97 @@
     <title>Boltz Embed Example</title>
     <style>
         html {
-            background-color: #333;
-            color: #888;
+            background-color: darkkhaki;
+            color: maroon;
             text-align: center;
         }
     </style>
 </head>
 <body>
     <h1>Boltz Embed Example</h1>
-    <iframe id="boltz" width="400" src="https://webapp-git-feat-embed-boltz.vercel.app/?embed=1&refId=embed" scrolling="no" frameborder="0"></iframe>
-    <!-- <iframe id="boltz" width="400" src="http://localhost:5173/?embed=1&refId=embed" scrolling="no" frameborder="0"></iframe> -->
+    <iframe id="boltz" width="400" src="" scrolling="no" frameborder="0"></iframe>
+    <h2 id="url"></h2>
+    <label>Set Invoice: <input type="checkbox" id="invoice" /></label>
+    <br />
+    <label>Set Address: <input type="checkbox" id="address" /></label>
+    <br />
+    <label>Set Send Amount: <input type="number" id="amount" value="100000"/></label>
+    <br />
+    <label>Set Asset Send:
+        <label>
+            <input type="radio" name="assetSend[]" value="BTC"/>
+            BTC
+        </label>
+        <label>
+            <input type="radio" name="assetSend[]" value="LN"/>
+            LN
+        </label>
+        <label>
+            <input type="radio" name="assetSend[]" value="L-BTC"/>
+            L-BTC
+        </label>
+        <label>
+            <input type="radio" name="assetSend[]" value="RBTC"/>
+            RBTC
+        </label>
+    </label>
+    <br />
+    <label> Set Asset Receive:
+        <label>
+            <input type="radio" name="assetReceive[]" value="BTC"/>
+            BTC
+        </label>
+        <label>
+            <input type="radio" name="assetReceive[]" value="LN"/>
+            LN
+        </label>
+        <label>
+            <input type="radio" name="assetReceive[]" value="L-BTC"/>
+            L-BTC
+        </label>
+        <label>
+            <input type="radio" name="assetReceive[]" value="RBTC"/>
+            RBTC
+        </label>
+    </label>
+    <br />
+    <br />
+    <button id="update">Update</button>
     <script type="module">
         import { iframeResize } from 'iframe-resizer';
+        const baseUrl = "https://webapp-git-feat-url-params-3-boltz.vercel.app?embed=1&ref=embed";
+        let url = baseUrl;
+        const urlElement = document.getElementById('url');
+        const iframe = document.getElementById('boltz');
+        const updateElement = document.getElementById('update');
+        urlElement.innerText = url;
+        iframe.src = url;
         iframeResize({ log: false }, '#boltz');
+        updateElement.addEventListener('click', () => {
+            url = baseUrl;
+            const invoice = document.getElementById('invoice').checked;
+            if (invoice) {
+                url += "&invoice=lnbc10n1p0v";
+            }
+            const address = document.getElementById('address').checked;
+            if (address) {
+                url += "&address=bc1qar0srrr";
+            }
+            const amount = document.getElementById('amount').value;
+            if (amount) {
+                url += `&sendAmount=${amount}`;
+            }
+            const assetSend = document.querySelector('input[name="assetSend[]"]:checked');
+            if (assetSend) {
+                url += `&assetSend=${assetSend.value}`;
+            }
+            const assetReceive = document.querySelector('input[name="assetReceive[]"]:checked');
+            if (assetReceive) {
+                url += `&assetReceive=${assetReceive.value}`;
+            }
+            iframe.src = url;
+            urlElement.innerText = url;
+        });
     </script>
 </body>
 </html>
